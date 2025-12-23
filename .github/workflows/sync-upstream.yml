@@ -1,0 +1,139 @@
+---
+name: Sync Upstream
+
+on:
+  # Run on a schedule - once a week
+  schedule:
+    - cron: '0 0 * * 0'
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      upstream_branch:
+        description: 'Branch to sync from upstream'
+        required: false
+        default: 'main'
+      create_pr:
+        description: 'Create PR to merge upstream into dev'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Sync with Upstream
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add Upstream Remote
+        run: |
+          # Add upstream remote if not exists
+          if ! git remote | grep -q upstream; then
+            git remote add upstream https://github.com/mistralai/mistral-vibe.git
+          fi
+
+          # Fetch all branches from upstream
+          git fetch upstream
+
+      - name: Sync Upstream Branch
+        env:
+          UPSTREAM_BRANCH: ${{ github.event.inputs.upstream_branch || 'main' }}
+        run: |
+          # Determine the upstream branch to sync
+          echo "Syncing with upstream/${UPSTREAM_BRANCH}"
+
+          # Check if upstream branch exists locally
+          if git show-ref --verify --quiet refs/heads/upstream; then
+            echo "Local 'upstream' branch exists, updating..."
+            git checkout upstream
+            git reset --hard upstream/${UPSTREAM_BRANCH}
+          else
+            echo "Creating local 'upstream' branch from upstream/${UPSTREAM_BRANCH}..."
+            git checkout -b upstream upstream/${UPSTREAM_BRANCH}
+          fi
+
+          # Push to origin
+          git push origin upstream --force
+
+          echo "Successfully synced 'upstream' branch with upstream/${UPSTREAM_BRANCH}"
+
+      - name: Create Pull Request
+        if: ${{ github.event.inputs.create_pr == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTREAM_BRANCH: ${{ github.event.inputs.upstream_branch || 'main' }}
+        run: |
+          # Check if there are differences between upstream and dev
+          git fetch origin dev
+          if git diff --quiet origin/dev...origin/upstream; then
+            echo "No differences between upstream and dev. Skipping PR creation."
+            exit 0
+          fi
+
+          # Check if a PR already exists
+          EXISTING_PR=$(gh pr list --head upstream --base dev --json number --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #${EXISTING_PR} already exists. Skipping."
+            echo "::notice::Existing PR found: #${EXISTING_PR}"
+          else
+            # Create PR body file
+            cat > /tmp/pr_body.md << 'EOF'
+          ## Upstream Sync
+
+          This PR brings in the latest changes from the upstream repository.
+
+          ### Review Checklist
+          - [ ] Review changes for breaking modifications
+          - [ ] Ensure our customizations are preserved
+          - [ ] Test after merge
+
+          ---
+          *This PR was automatically created by the Sync Upstream workflow.*
+          EOF
+
+            # Create PR
+            PR_URL=$(gh pr create \
+              --title "Sync upstream changes from mistralai/mistral-vibe" \
+              --body-file /tmp/pr_body.md \
+              --head upstream \
+              --base dev)
+
+            echo "::notice::Created PR: ${PR_URL}"
+          fi
+
+      - name: Summary
+        env:
+          CREATE_PR: ${{ github.event.inputs.create_pr }}
+          UPSTREAM_BRANCH: ${{ github.event.inputs.upstream_branch || 'main' }}
+        run: |
+          echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Upstream Repository:** mistralai/mistral-vibe" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch Synced:** ${UPSTREAM_BRANCH}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Branch:** upstream" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The upstream branch is now in sync with the upstream repository." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$CREATE_PR" == "true" ]; then
+            echo "### Pull Request" >> $GITHUB_STEP_SUMMARY
+            echo "A PR has been created (or already exists) to merge upstream changes into dev." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Merging Updates" >> $GITHUB_STEP_SUMMARY
+            echo "To merge upstream changes into dev, run this workflow again with Create PR enabled." >> $GITHUB_STEP_SUMMARY
+          fi
