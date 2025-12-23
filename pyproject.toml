@@ -1,16 +1,16 @@
 [project]
-name = "mistral-vibe"
+name = "ava-cli"
 version = "1.2.2"
-description = "Minimal CLI coding agent by Mistral"
+description = "Minimal CLI coding agent: AVA"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Apache-2.0" }
-authors = [{ name = "Mistral AI" }]
+authors = [{ name = "CypherpunkSamurai" }]
 keywords = [
     "ai",
     "cli",
     "coding-assistant",
-    "mistral",
+    "ava",
     "llm",
     "developer-tools",
 ]
@@ -46,10 +46,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mistralai/mistral-vibe"
-Repository = "https://github.com/mistralai/mistral-vibe"
-Issues = "https://github.com/mistralai/mistral-vibe/issues"
-Documentation = "https://github.com/mistralai/mistral-vibe#readme"
+Homepage = "https://github.com/CypherpunkSamurai/ava-cli"
+Repository = "https://github.com/CypherpunkSamurai/ava-cli"
+Issues = "https://github.com/CypherpunkSamurai/ava-cli/issues"
+Documentation = "https://github.com/CypherpunkSamurai/ava-cli#readme"
 
 
 [build-system]
@@ -64,8 +64,8 @@ include = ["vibe/"]
 
 
 [project.scripts]
-vibe = "vibe.cli.entrypoint:main"
-vibe-acp = "vibe.acp.entrypoint:main"
+ava = "vibe.cli.entrypoint:main"
+ava-acp = "vibe.acp.entrypoint:main"
 
 
 [tool.uv]

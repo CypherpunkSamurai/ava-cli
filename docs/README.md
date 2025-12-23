@@ -1,7 +1,7 @@
-# Mistral Vibe Documentation
+# AVA Cli Documentation
 
-Welcome to the Mistral Vibe documentation! For basic setup, see the [main README](https://github.com/mistral-vibe/mistral-vibe#readme).
+Welcome to the AVA Cli documentation! For basic setup, see the [main README](https://github.com/CypherpunkSamurai/ava-cli#readme).
 
 ## Available Documentation
 
-- **[ACP Setup](acp-setup.md)** - Setup instructions for using Mistral Vibe with various editors and IDEs that support the Agent Client Protocol.
+- **[ACP Setup](acp-setup.md)** - Setup instructions for using AVA Cli with various editors and IDEs that support the Agent Client Protocol.

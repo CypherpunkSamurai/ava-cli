@@ -1,5 +1,5 @@
 {
-  description = "Mistral Vibe!";
+  description = "AVA Cli!";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -70,12 +70,12 @@
           ]
         );
     in {
-      packages.default = pythonSet.mkVirtualEnv "mistralai-vibe-env" workspace.deps.default;
+      packages.default = pythonSet.mkVirtualEnv "ava-cli-env" workspace.deps.default;
 
       apps = {
         default = {
           type = "app";
-          program = "${self.packages.${system}.default}/bin/vibe";
+          program = "${self.packages.${system}.default}/bin/ava";
         };
       };
 
@@ -91,7 +91,7 @@
 
               # Apply fixups for building an editable package of your workspace packages
               (final: prev: {
-                mistralai-vibe = prev.mistralai-vibe.overrideAttrs (old: {
+                ava-cli = prev.ava-cli.overrideAttrs (old: {
                   # It's a good idea to filter the sources going into an editable build
                   # so the editable package doesn't have to be rebuilt on every change.
                   src = lib.fileset.toSource {
@@ -112,7 +112,7 @@
             ]
           );
 
-          virtualenv = editablePythonSet.mkVirtualEnv "mistralai-vibe-dev-env" workspace.deps.all;
+          virtualenv = editablePythonSet.mkVirtualEnv "ava-cli-dev-env" workspace.deps.all;
         in
           pkgs.mkShell {
             packages = [

@@ -25,8 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Modular mode system
-- Trusted folder mechanism for local .vibe directories
-- Document public setup for vibe-acp in zed, jetbrains and neovim
+- Trusted folder mechanism for local .ava directories
+- Document public setup for ava-acp in zed, jetbrains and neovim
 - `--version` flag
 
 ### Changed
@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Rename agent in distribution/zed/extension.toml to mistral-vibe
+- Rename agent in distribution/zed/extension.toml to ava-cli
 
 ### Fixed
 
@@ -132,7 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix setup flow for vibe-acp builds
+- Fix setup flow for ava-acp builds
 
 ## [1.0.1] - 2025-12-09
 

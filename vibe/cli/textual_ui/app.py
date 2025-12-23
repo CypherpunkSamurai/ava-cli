@@ -1244,7 +1244,7 @@ class VibeApp(App):
         if self._update_notification_shown:
             return
 
-        message = f'{self._current_version} => {update.latest_version}\nRun "uv tool upgrade mistral-vibe" to update'
+        message = f'{self._current_version} => {update.latest_version}\nRun "uv tool upgrade ava-cli" to update'
 
         self.notify(
             message, title="Update available", severity="information", timeout=10
@@ -1268,8 +1268,8 @@ def _print_session_resume_message(session_id: str | None) -> None:
         return
 
     print()
-    print("To continue this session, run: vibe --continue")
-    print(f"Or: vibe --resume {session_id}")
+    print("To continue this session, run: ava --continue")
+    print(f"Or: ava --resume {session_id}")
 
 
 def run_textual_ui(
@@ -1280,7 +1280,7 @@ def run_textual_ui(
     loaded_messages: list[LLMMessage] | None = None,
 ) -> None:
     """Run the Textual UI."""
-    update_notifier = PyPIVersionUpdateGateway(project_name="mistral-vibe")
+    update_notifier = PyPIVersionUpdateGateway(project_name="ava-cli")
     update_cache_repository = FileSystemUpdateCacheRepository()
     app = VibeApp(
         config=config,

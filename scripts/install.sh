@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Mistral Vibe Installation Script
-# This script installs uv if not present and then installs mistral-vibe using uv
+# AVA Cli Installation Script
+# This script installs uv if not present and then installs ava-cli using uv
 
 set -euo pipefail
 
@@ -79,25 +79,23 @@ function install_uv() {
 }
 
 function install_vibe() {
-    info "Installing mistral-vibe from GitHub repository using uv..."
-    uv tool install mistral-vibe
+    info "Installing ava-cli from GitHub repository using uv..."
+    uv tool install ava-cli
 
-    success "Mistral Vibe installed successfully! (commands: vibe, vibe-acp)"
+    success "AVA Cli installed successfully! (commands: ava, ava-acp)"
 }
 
 function main() {
-    echo
-    echo "██████████████████░░"
-    echo "██████████████████░░"
-    echo "████  ██████  ████░░"
-    echo "████    ██    ████░░"
-    echo "████          ████░░"
-    echo "████  ██  ██  ████░░"
-    echo "██      ██      ██░░"
-    echo "██████████████████░░"
-    echo "██████████████████░░"
-    echo
-    echo "Starting Mistral Vibe installation..."
+    echo -e "${BLUE}"
+    echo '         +   ++            ++     +'
+    echo '        +++    ++         ++     +++'
+    echo '      ++   ++    ++      +     ++   ++'
+    echo '    ++      ++     ++  ++     ++      ++'
+    echo '   ++         ++     ++     ++         ++'
+    echo ' ++            ++          ++            ++'
+    echo '++               ++      ++               ++'
+    echo -e "${NC}"
+    echo -e "${GREEN}Starting AVA Cli installation...${NC}"
     echo
 
     check_platform
@@ -110,16 +108,16 @@ function main() {
 
     install_vibe
 
-    if command -v vibe &> /dev/null; then
+    if command -v ava &> /dev/null; then
         success "Installation completed successfully!"
         echo
-        echo "You can now run vibe with:"
-        echo "  vibe"
+        echo "You can now run ava with:"
+        echo "  ava"
         echo
         echo "Or for ACP mode:"
-        echo "  vibe-acp"
+        echo "  ava-acp"
     else
-        error "Installation completed but 'vibe' command not found"
+        error "Installation completed but 'ava' command not found"
         error "Please check your installation and PATH settings"
         exit 1
     fi

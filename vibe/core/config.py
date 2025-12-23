@@ -24,7 +24,7 @@ from vibe.core.paths.global_paths import GLOBAL_ENV_FILE, SESSION_LOG_DIR
 from vibe.core.prompts import SystemPrompt
 from vibe.core.tools.base import BaseToolConfig
 
-PROJECT_DOC_FILENAMES = ["AGENTS.md", "VIBE.md", ".vibe.md"]
+PROJECT_DOC_FILENAMES = ["AGENTS.md", "AVA.md", ".ava.md"]
 
 
 def load_api_keys_from_env() -> None:
@@ -248,7 +248,7 @@ DEFAULT_PROVIDERS = [
 
 DEFAULT_MODELS = [
     ModelConfig(
-        name="mistral-vibe-cli-latest",
+        name="ava-cli-latest",
         provider="mistral",
         alias="devstral-2",
         input_price=0.4,
@@ -327,7 +327,7 @@ class VibeConfig(BaseSettings):
     )
 
     model_config = SettingsConfigDict(
-        env_prefix="VIBE_", case_sensitive=False, extra="ignore"
+        env_prefix="AVA_", case_sensitive=False, extra="ignore"
     )
 
     @property
